@@ -20,7 +20,7 @@ This will install the latest development version of `pyenv-pyright` into the `$(
 **Important note:** If you installed pyenv into a non-standard directory, make sure that you clone this repo into the 'plugins' directory of wherever you installed into.
 
 ```
-$ git clone https://github.com/alefpereira/pyenv-pyright.git $(pyenv root)/plugins/pyenv-pyright
+git clone https://github.com/2elli/pyenv-pyright.git $(pyenv root)/plugins/pyenv-pyright
 ```
 
 ## Usage
