@@ -47,7 +47,7 @@ if [ "$1" = "--complete" ]; then
   exec pyenv-virtualenvs --bare
 fi
 
-if ! which jq; then
+if ! which jq &> /dev/null; then
     echo "jq not installed"
     exit -1
 fi
