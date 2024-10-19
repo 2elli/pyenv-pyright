@@ -14,6 +14,6 @@ if [[ -z $pyenv_root || ! -d $pyenv_root ]]; then
 fi
 
 install_dir="$(pyenv root)/plugins/pyenv-pyright"
-cp -Ppr . "${install_dir}"
+cp -Pprf . "${install_dir}"
 
 echo "Installed pyenv-pyright to ${install_dir}"
