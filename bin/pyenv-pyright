@@ -47,17 +47,22 @@ if [ "$1" = "--complete" ]; then
   exec pyenv-virtualenvs --bare
 fi
 
+if [[ ! which jq ]]; then
+    echo "jq not installed"
+    exit -1
+fi
+
 PYRIGHT_FILENAME='pyrightconfig.json'
 PYRIGHT_VENV_PATH="$PYENV_ROOT/versions"
 
 create_new_file() {
     pyright_venv=$1
     new_file='{"venvPath":"'$PYRIGHT_VENV_PATH'", "venv":"'$pyright_venv'"}'
-    echo $new_file | json_pp > $PYRIGHT_FILENAME
+    echo $new_file | jq > $PYRIGHT_FILENAME
 }
 
 get_key() {
-    cat $PYRIGHT_FILENAME | json_pp | grep -e "\s*\"${1}\"\s*:\s*\".*\"" -o | grep "\"${1}\"" -o || true
+    cat $PYRIGHT_FILENAME | jq | grep -e "\s*\"${1}\"\s*:\s*\".*\"" -o | grep "\"${1}\"" -o || true
 }
 
 update_file_key() {
@@ -65,11 +70,11 @@ update_file_key() {
     value=$2
     has_key=$(get_key $key)
     if [ -z $has_key ]; then
-        new_file=$(cat $PYRIGHT_FILENAME | json_pp | sed "s|^{$|{\"$key\":\"$value\"\,|")
+        new_file=$(cat $PYRIGHT_FILENAME | jq | sed "s|^{$|{\"$key\":\"$value\"\,|")
     else
-        new_file=$(cat $PYRIGHT_FILENAME | json_pp | sed 's|^\s*"'$key'"\s*:\s*".*"|"'$key'":"'$value'"|')
+        new_file=$(cat $PYRIGHT_FILENAME | jq | sed 's|^\s*"'$key'"\s*:\s*".*"|"'$key'":"'$value'"|')
     fi
-    echo $new_file | json_pp > $PYRIGHT_FILENAME
+    echo $new_file | jq > $PYRIGHT_FILENAME
 }
 
 setup_pyrightconfig_file() {
@@ -77,7 +82,7 @@ setup_pyrightconfig_file() {
 
     if [ -e $PYRIGHT_FILENAME ]; then
         if [ -f $PYRIGHT_FILENAME ]; then
-            if [ "$(cat $PYRIGHT_FILENAME | json_pp)" = "{}" ]; then
+            if [ "$(cat $PYRIGHT_FILENAME | jq)" = "{}" ]; then
                 create_new_file $pyright_venv
             else
                 update_file_key "venv" $pyright_venv
