@@ -13,6 +13,10 @@ So with this plugin you can do this with only one command:
 pyenv pyright
 ```
 
+## Requirements
+https://github.com/jqlang/jq
+`jq`
+
 ## Installation
 
 This will install the latest development version of `pyenv-pyright` into the `$(pyenv root)/plugins/pyenv-pyright` directory.
